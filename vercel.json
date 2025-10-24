@@ -3,10 +3,12 @@
   "outputDirectory": ".",
   "functions": {
     "api/recommend.js": {
-      "runtime": "@vercel/node@2.15.10"
+      "runtime": "@vercel/node@2.15.10",
+      "maxDuration": 30
     },
     "api/generateReport.js": {
-      "runtime": "@vercel/node@2.15.10"
+      "runtime": "@vercel/node@2.15.10",
+      "maxDuration": 30
     }
   },
   "rewrites": [
