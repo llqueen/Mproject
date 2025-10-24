@@ -1,6 +1,9 @@
 {
   "buildCommand": "echo 'No build required'",
   "outputDirectory": ".",
+  "engines": {
+    "node": "18.x"
+  },
   "functions": {
     "api/recommend.js": {
       "runtime": "@vercel/node@3.0.0"
