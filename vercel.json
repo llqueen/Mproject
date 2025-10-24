@@ -1,0 +1,20 @@
+{
+  "functions": {
+    "api/recommend.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/generateReport.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/recommend",
+      "destination": "/api/recommend"
+    },
+    {
+      "source": "/generateReport", 
+      "destination": "/api/generateReport"
+    }
+  ]
+}

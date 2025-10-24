@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 부업 스캐너</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 24px; background: #f8fafc; }
+    .wrap { max-width: 680px; margin: 0 auto; }
+    h1 { font-size: 28px; margin-bottom: 8px; color: #1e293b; }
+    .subtitle { color: #64748b; margin-bottom: 32px; }
+    .card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 16px 0; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .result-card { border-left: 4px solid #3b82f6; }
+    label { display:block; font-weight:600; margin: 8px 0 4px; color: #374151; }
+    input, select, button, textarea { width:100%; padding:12px; border:1px solid #d1d5db; border-radius:8px; font-size: 14px; }
+    input:focus, select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+    button { cursor:pointer; font-weight:700; background: #3b82f6; color: white; border: none; transition: background 0.2s; }
+    button:hover { background: #2563eb; }
+    button:disabled { background: #9ca3af; cursor: not-allowed; }
+    .btnBuy { background: #10b981; margin-top: 12px; }
+    .btnBuy:hover { background: #059669; }
+    .row { display:flex; gap:12px; }
+    .row > div { flex:1; }
+    .muted { color:#6b7280; font-size: 12px; }
+    .loading { text-align: center; padding: 20px; color: #6b7280; }
+    .error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px; border-radius: 8px; margin: 12px 0; }
+    .success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 12px; border-radius: 8px; margin: 12px 0; }
+    .difficulty { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .difficulty.초급 { background: #dbeafe; color: #1e40af; }
+    .difficulty.중급 { background: #fef3c7; color: #92400e; }
+    .difficulty.고급 { background: #fecaca; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🤖 AI 부업 스캐너</h1>
+    <p class="subtitle">간단 정보만 넣으면 AI가 현실적인 실행 플랜을 카드로 정리해줘요. 30초면 확인 가능!</p>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>기술 키워드 *</label>
+          <input id="skills" placeholder="예: 영상편집, 엑셀, 블로그, 디자인" />
+        </div>
+        <div>
+          <label>주당 가능 시간(시간)</label>
+          <input id="hours" type="number" value="5" min="1" max="40" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>선호 형태</label>
+          <select id="pref">
+            <option value="online">온라인</option>
+            <option value="offline">오프라인</option>
+            <option value="both">둘 다</option>
+          </select>
+        </div>
+        <div>
+          <label>리스크 선호</label>
+          <select id="risk">
+            <option value="low">낮음 (안정적)</option>
+            <option value="mid">중간 (균형)</option>
+            <option value="high">높음 (도전적)</option>
+          </select>
+        </div>
+      </div>
+      <button id="btnGo" style="margin-top:16px">🚀 무료로 추천 받기</button>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <script>
+    const endpointRecommend = '/api/recommend';
+    const endpointReport = '/api/generateReport';
+
+    document.getElementById('btnGo').addEventListener('click', async () => {
+      const skills = document.getElementById('skills').value.trim();
+      const hours = parseInt(document.getElementById('hours').value, 10) || 5;
+      const online_or_offline = document.getElementById('pref').value;
+      const risk = document.getElementById('risk').value;
+
+      if (!skills) { 
+        showError('기술 키워드를 입력해 주세요'); 
+        return; 
+      }
+
+      const $btn = document.getElementById('btnGo');
+      const $results = document.getElementById('results');
+      
+      $btn.disabled = true;
+      $btn.textContent = 'AI가 분석 중...';
+      $results.innerHTML = '<div class="loading">🤖 AI가 당신에게 딱 맞는 부업을 찾고 있어요...</div>';
+
+      try {
+        const payload = { skills, hours_per_week: hours, online_or_offline, risk_level: risk };
+        const res = await fetch(endpointRecommend, { 
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' }, 
+          body: JSON.stringify(payload) 
+        });
+        
+        if (!res.ok) {
+          throw new Error(`서버 오류: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        const list = (data.items || []);
+
+        if (list.length === 0) {
+          throw new Error('추천 결과를 찾을 수 없습니다');
+        }
+
+        $results.innerHTML = '';
+
+        list.forEach((it, index) => {
+          const div = document.createElement('div');
+          div.className = 'card result-card';
+          div.innerHTML = `
+            <h3 style="margin:4px 0 8px; color: #1e293b;">${it.title}</h3>
+            <div style="margin-bottom: 8px;">
+              <span class="difficulty ${it.difficulty}">${it.difficulty}</span>
+              <span style="margin-left: 12px; color: #059669; font-weight: 600;">${it.monthly_estimate}</span>
+            </div>
+            <p style="margin:8px 0; color: #4b5563;">${it.one_line_tip}</p>
+            <button class="btnBuy" data-index="${index}">📋 자세한 실행 리포트 보기 (₩2,000)</button>
+          `;
+          
+          div.querySelector('.btnBuy').addEventListener('click', async (e) => {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.textContent = '리포트 생성 중...';
+            
+            try {
+              const reportRes = await fetch(endpointReport, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  user: { skills, hours_per_week: hours, online_or_offline, risk_level: risk },
+                  chosen_title: it.title
+                })
+              });
+              
+              if (!reportRes.ok) {
+                throw new Error(`리포트 생성 오류: ${reportRes.status}`);
+              }
+              
+              const reportData = await reportRes.json();
+              const md = reportData.markdown || '# 리포트 생성 실패\n\n죄송합니다. 리포트를 생성할 수 없습니다.';
+              
+              // 마크다운을 다운로드
+              const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `부업_리포트_${it.title.replace(/[^가-힣a-zA-Z0-9]/g, '_')}.md`;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              URL.revokeObjectURL(url);
+              
+              btn.textContent = '✅ 리포트 다운로드 완료';
+              setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = '📋 자세한 실행 리포트 보기 (₩2,000)';
+              }, 2000);
+              
+            } catch (err) {
+              showError(`리포트 생성 실패: ${err.message}`);
+              btn.disabled = false;
+              btn.textContent = '📋 자세한 실행 리포트 보기 (₩2,000)';
+            }
+          });
+          
+          $results.appendChild(div);
+        });
+
+        showSuccess(`${list.length}개의 맞춤 부업을 찾았어요!`);
+
+      } catch (err) {
+        showError(`오류가 발생했습니다: ${err.message}`);
+        $results.innerHTML = '';
+      } finally {
+        $btn.disabled = false;
+        $btn.textContent = '🚀 무료로 추천 받기';
+      }
+    });
+
+    function showError(message) {
+      const $results = document.getElementById('results');
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error';
+      errorDiv.textContent = message;
+      $results.innerHTML = '';
+      $results.appendChild(errorDiv);
+    }
+
+    function showSuccess(message) {
+      const $results = document.getElementById('results');
+      const successDiv = document.createElement('div');
+      successDiv.className = 'success';
+      successDiv.textContent = message;
+      $results.insertBefore(successDiv, $results.firstChild);
+      setTimeout(() => successDiv.remove(), 3000);
+    }
+
+    // Enter 키로 제출
+    document.getElementById('skills').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('btnGo').click();
+      }
+    });
+  </script>
+</body>
+</html>
