@@ -29,6 +29,56 @@
     .difficulty.초급 { background: #dbeafe; color: #1e40af; }
     .difficulty.중급 { background: #fef3c7; color: #92400e; }
     .difficulty.고급 { background: #fecaca; color: #991b1b; }
+    .success-stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .story-card {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+    }
+    .story-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+    .story-content h4 {
+      margin: 0 0 5px 0;
+      font-size: 18px;
+    }
+    .story-description {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .category-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .category-icon {
+      margin-bottom: 10px;
+    }
+    .category-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    .category-description {
+      font-size: 12px;
+      line-height: 1.3;
+    }
   </style>
 </head>
 <body>
@@ -69,6 +119,87 @@
     </div>
 
     <div id="results"></div>
+
+    <!-- 성공 사례 및 인기 카테고리 섹션 -->
+    <h2 style="text-align: center; margin-top: 40px; margin-bottom: 30px; color: #1e293b;">성공 사례 및 인기 카테고리</h2>
+
+    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #374151;">영감을 주는 성공 스토리</h3>
+    <div class="success-stories-grid">
+      <div class="story-card card">
+        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face" alt="주부 김미정님" class="story-image">
+        <div class="story-content">
+          <h4>주부 김미정님, 블로그로 월 200만</h4>
+          <p class="story-description muted">육아 중에도 틈틈이 블로그를 운영하며, 주부의 일상을 공유하며 광고 수익과 협찬을 통해 안정적인 부수업을 창출했습니다.</p>
+        </div>
+      </div>
+      <div class="story-card card">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="직장인 박준호님" class="story-image">
+        <div class="story-content">
+          <h4>직장인 박준호님, 코딩 부업으로 제2의 커리어 시작!</h4>
+          <p class="story-description muted">퇴근 후 온라인 강의를 듣고 간단한 웹사이트 제작 부업을 시작해, 본업 외 새로운 기술을 익히며 수입을 늘렸습니다.</p>
+        </div>
+      </div>
+      <div class="story-card card">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="대학생 이수민님" class="story-image">
+        <div class="story-content">
+          <h4>대학생 이수민님, 그림 판매로 학자금 마련</h4>
+          <p class="story-description muted">자신이 그린 디지털 일러스트를 온라인 마켓에 판매하며, 용돈은 물론 학자금까지 스스로 마련하는 뿌듯함을 경험했습니다.</p>
+        </div>
+      </div>
+      <div class="story-card card">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" alt="은퇴자 최영희님" class="story-image">
+        <div class="story-content">
+          <h4>은퇴자 최영희님, 주식 투자 스터디 운영</h4>
+          <p class="story-description muted">자신만의 주식 투자 노하우를 공유하는 온라인 스터디를 운영하며, 꾸준한 수업과 함께 지식 나눔의 즐거움을 찾았습니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 40px; margin-bottom: 15px; color: #374151;">인기 부업 카테고리</h3>
+    <div class="categories-grid">
+      <div class="category-card card">
+        <div class="category-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        </div>
+        <div class="category-title">IT/개발</div>
+        <p class="category-description muted">웹개발, 데이터 분석 등 기술 기반의 부업</p>
+      </div>
+      <div class="category-card card">
+        <div class="category-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        </div>
+        <div class="category-title">디자인/예술</div>
+        <p class="category-description muted">일러스트, 웹툰, 로고 디자인 등 크리에이티브 부업</p>
+      </div>
+      <div class="category-card card">
+        <div class="category-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+        </div>
+        <div class="category-title">마케팅/홍보</div>
+        <p class="category-description muted">SNS 관리, 콘텐츠 마케팅, 블로그 운영 등 홍보 부업</p>
+      </div>
+      <div class="category-card card">
+        <div class="category-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+        </div>
+        <div class="category-title">글쓰기/번역</div>
+        <p class="category-description muted">원고 작성, 번역, 카피라이팅 등 언어 기반 부업</p>
+      </div>
+      <div class="category-card card">
+        <div class="category-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <div class="category-title">재테크/투자</div>
+        <p class="category-description muted">주식, 부동산, 가상화폐 등 재산 증식 부업</p>
+      </div>
+      <div class="category-card card">
+        <div class="category-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="category-title">교육/코칭</div>
+        <p class="category-description muted">온라인 강의, 멘토링, 개인 레슨 등 지식 공유 부업</p>
+      </div>
+    </div>
   </div>
 
   <script>
