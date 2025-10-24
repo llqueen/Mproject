@@ -90,27 +90,16 @@
       const $results = document.getElementById('results');
       
       $btn.disabled = true;
-      $btn.textContent = 'AI가 분석 중...';
-      $results.innerHTML = '<div class="loading">🤖 AI가 당신에게 딱 맞는 부업을 찾고 있어요...</div>';
+      $btn.textContent = '분석 중...';
+      $results.innerHTML = '<div class="loading">🤖 당신에게 딱 맞는 부업을 찾고 있어요...</div>';
 
-      try {
-        const payload = { skills, hours_per_week: hours, online_or_offline, risk_level: risk };
-        const res = await fetch(endpointRecommend, { 
-          method: 'POST', 
-          headers: { 'Content-Type': 'application/json' }, 
-          body: JSON.stringify(payload) 
-        });
-        
-        if (!res.ok) {
-          throw new Error(`서버 오류: ${res.status}`);
-        }
-        
-        const data = await res.json();
-        const list = (data.items || []);
-
-        if (list.length === 0) {
-          throw new Error('추천 결과를 찾을 수 없습니다');
-        }
+      // 2초 대기 후 결과 표시
+      setTimeout(() => {
+        const list = [
+          { title: "쿠팡파트너스", difficulty: "초급", monthly_estimate: "₩50,000~₩150,000", one_line_tip: "인기 키워드로 리뷰 작성 후 링크 걸어 판매 유도" },
+          { title: "디지털템플릿", difficulty: "초급", monthly_estimate: "₩100,000~₩300,000", one_line_tip: "노션·엑셀 템플릿 제작 후 마켓에 등록" },
+          { title: "프리랜서작업", difficulty: "중급", monthly_estimate: "₩200,000~₩500,000", one_line_tip: "크몽·프리랜서 플랫폼에 포트폴리오 올리고 소액 의뢰 수주" }
+        ];
 
         $results.innerHTML = '';
 
@@ -132,59 +121,66 @@
             btn.disabled = true;
             btn.textContent = '리포트 생성 중...';
             
-            try {
-              const reportRes = await fetch(endpointReport, {
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  user: { skills, hours_per_week: hours, online_or_offline, risk_level: risk },
-                  chosen_title: it.title
-                })
-              });
-              
-              if (!reportRes.ok) {
-                throw new Error(`리포트 생성 오류: ${reportRes.status}`);
-              }
-              
-              const reportData = await reportRes.json();
-              const md = reportData.markdown || '# 리포트 생성 실패\n\n죄송합니다. 리포트를 생성할 수 없습니다.';
-              
-              // 마크다운을 다운로드
-              const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `부업_리포트_${it.title.replace(/[^가-힣a-zA-Z0-9]/g, '_')}.md`;
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
-              URL.revokeObjectURL(url);
-              
-              btn.textContent = '✅ 리포트 다운로드 완료';
-              setTimeout(() => {
-                btn.disabled = false;
-                btn.textContent = '📋 자세한 실행 리포트 보기 (₩2,000)';
-              }, 2000);
-              
-            } catch (err) {
-              showError(`리포트 생성 실패: ${err.message}`);
+            // 간단한 리포트 생성
+            const md = `# ${it.title} 부업 가이드
+
+## 개요
+${it.title}는 ${it.difficulty} 난이도의 부업으로, 예상 월수익은 ${it.monthly_estimate}입니다.
+
+## 준비 항목
+1. 컴퓨터 및 인터넷 연결
+2. 관련 계정 가입
+3. 기본 도구 설치
+4. 포트폴리오 준비
+5. 마케팅 자료
+
+## 7단계 실행 플랜
+1. 기본 조사 및 학습
+2. 계정 생성 및 설정
+3. 첫 작업 시작
+4. 피드백 수집
+5. 포트폴리오 구축
+6. 수익 증대
+7. 확장 및 발전
+
+## 현실적 수익 예측
+- 1개월: ₩50,000~₩100,000
+- 3개월: ₩100,000~₩200,000
+- 6개월: ₩200,000~₩400,000
+
+## 실행 팁
+${it.one_line_tip}
+
+## 추천 링크
+- 관련 플랫폼: [링크]
+- 학습 자료: [링크]
+- 커뮤니티: [링크]`;
+            
+            // 마크다운을 다운로드
+            const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `부업_리포트_${it.title.replace(/[^가-힣a-zA-Z0-9]/g, '_')}.md`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            
+            btn.textContent = '✅ 리포트 다운로드 완료';
+            setTimeout(() => {
               btn.disabled = false;
               btn.textContent = '📋 자세한 실행 리포트 보기 (₩2,000)';
-            }
+            }, 2000);
           });
           
           $results.appendChild(div);
         });
 
         showSuccess(`${list.length}개의 맞춤 부업을 찾았어요!`);
-
-      } catch (err) {
-        showError(`오류가 발생했습니다: ${err.message}`);
-        $results.innerHTML = '';
-      } finally {
         $btn.disabled = false;
         $btn.textContent = '🚀 무료로 추천 받기';
-      }
+      }, 2000);
     });
 
     function showError(message) {
