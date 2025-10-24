@@ -113,7 +113,7 @@
               <span style="margin-left: 12px; color: #059669; font-weight: 600;">${it.monthly_estimate}</span>
             </div>
             <p style="margin:8px 0; color: #4b5563;">${it.one_line_tip}</p>
-            <button class="btnBuy" data-index="${index}">📋 자세한 실행 리포트 보기 (₩2,000)</button>
+            <button class="btnBuy" data-index="${index}">📋 자세한 실행 리포트 보기 (무료)</button>
           `;
           
           div.querySelector('.btnBuy').addEventListener('click', async (e) => {
@@ -121,56 +121,95 @@
             btn.disabled = true;
             btn.textContent = '리포트 생성 중...';
             
-            // 간단한 리포트 생성
-            const md = `# ${it.title} 부업 가이드
+            // 상세한 리포트 생성
+            const reportHtml = `
+              <div class="report-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                <div style="background: white; border-radius: 12px; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 24px; position: relative;">
+                  <button onclick="this.closest('.report-modal').remove()" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                  <h2 style="color: #1e293b; margin-bottom: 20px;">${it.title} 부업 완벽 가이드</h2>
+                  
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">📊 기본 정보</h3>
+                    <p><strong>난이도:</strong> ${it.difficulty}</p>
+                    <p><strong>예상 월수익:</strong> ${it.monthly_estimate}</p>
+                    <p><strong>시작 비용:</strong> ₩0~₩50,000</p>
+                    <p><strong>소요 시간:</strong> 주 5-10시간</p>
+                  </div>
 
-## 개요
-${it.title}는 ${it.difficulty} 난이도의 부업으로, 예상 월수익은 ${it.monthly_estimate}입니다.
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">🎯 핵심 전략</h3>
+                    <p>${it.one_line_tip}</p>
+                  </div>
 
-## 준비 항목
-1. 컴퓨터 및 인터넷 연결
-2. 관련 계정 가입
-3. 기본 도구 설치
-4. 포트폴리오 준비
-5. 마케팅 자료
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">📋 준비 항목</h3>
+                    <ul style="line-height: 1.6;">
+                      <li>컴퓨터 및 안정적인 인터넷 연결</li>
+                      <li>관련 플랫폼 계정 가입</li>
+                      <li>기본 도구 및 소프트웨어 설치</li>
+                      <li>포트폴리오 및 샘플 작업 준비</li>
+                      <li>마케팅용 프로필 및 소개글 작성</li>
+                      <li>가격 정책 및 서비스 범위 설정</li>
+                    </ul>
+                  </div>
 
-## 7단계 실행 플랜
-1. 기본 조사 및 학습
-2. 계정 생성 및 설정
-3. 첫 작업 시작
-4. 피드백 수집
-5. 포트폴리오 구축
-6. 수익 증대
-7. 확장 및 발전
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">🚀 7단계 실행 플랜</h3>
+                    <ol style="line-height: 1.6;">
+                      <li><strong>1주차:</strong> 기본 조사 및 학습 (관련 자료 수집, 경쟁사 분석)</li>
+                      <li><strong>2주차:</strong> 계정 생성 및 프로필 설정 (플랫폼 가입, 프로필 완성)</li>
+                      <li><strong>3주차:</strong> 첫 작업 시작 (소액 의뢰 수주, 경험 쌓기)</li>
+                      <li><strong>4주차:</strong> 피드백 수집 및 개선 (고객 리뷰 분석, 서비스 개선)</li>
+                      <li><strong>5-6주차:</strong> 포트폴리오 구축 (작업 사례 정리, 마케팅 자료 제작)</li>
+                      <li><strong>7-8주차:</strong> 수익 증대 (가격 인상, 고객 확대)</li>
+                      <li><strong>9주차+:</strong> 확장 및 발전 (다양한 서비스 추가, 장기 고객 확보)</li>
+                    </ol>
+                  </div>
 
-## 현실적 수익 예측
-- 1개월: ₩50,000~₩100,000
-- 3개월: ₩100,000~₩200,000
-- 6개월: ₩200,000~₩400,000
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">💰 현실적 수익 예측</h3>
+                    <div style="background: #f8fafc; padding: 16px; border-radius: 8px;">
+                      <p><strong>1개월차:</strong> ₩50,000~₩100,000 (학습 및 초기 작업)</p>
+                      <p><strong>3개월차:</strong> ₩100,000~₩200,000 (경험 쌓기, 고객 확보)</p>
+                      <p><strong>6개월차:</strong> ₩200,000~₩400,000 (안정적 수익 창출)</p>
+                      <p><strong>1년차:</strong> ₩300,000~₩600,000 (전문성 확보, 고객 네트워크 구축)</p>
+                    </div>
+                  </div>
 
-## 실행 팁
-${it.one_line_tip}
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">💡 성공 팁</h3>
+                    <ul style="line-height: 1.6;">
+                      <li>처음에는 가격보다 경험과 포트폴리오에 집중</li>
+                      <li>고객과의 소통을 최우선으로 생각</li>
+                      <li>지속적인 학습과 기술 향상</li>
+                      <li>정기적인 마케팅 및 프로모션 활동</li>
+                      <li>장기적인 고객 관계 구축</li>
+                    </ul>
+                  </div>
 
-## 추천 링크
-- 관련 플랫폼: [링크]
-- 학습 자료: [링크]
-- 커뮤니티: [링크]`;
+                  <div style="margin-bottom: 20px;">
+                    <h3 style="color: #374151; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">🔗 추천 플랫폼</h3>
+                    <ul style="line-height: 1.6;">
+                      <li><strong>${it.title === '쿠팡파트너스' ? '쿠팡파트너스' : '크몽'}:</strong> ${it.title === '쿠팡파트너스' ? 'https://partners.coupang.com' : 'https://kmong.com'}</li>
+                      <li><strong>프리랜서:</strong> https://freelancer.co.kr</li>
+                      <li><strong>${it.title === '디지털템플릿' ? '노션 템플릿' : '업무'}:</strong> ${it.title === '디지털템플릿' ? 'https://notion.so/templates' : 'https://www.work.go.kr'}</li>
+                    </ul>
+                  </div>
+
+                  <div style="text-align: center; margin-top: 24px;">
+                    <button onclick="this.closest('.report-modal').remove()" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;">닫기</button>
+                  </div>
+                </div>
+              </div>
+            `;
             
-            // 마크다운을 다운로드
-            const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `부업_리포트_${it.title.replace(/[^가-힣a-zA-Z0-9]/g, '_')}.md`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+            // 리포트 모달 표시
+            document.body.insertAdjacentHTML('beforeend', reportHtml);
             
-            btn.textContent = '✅ 리포트 다운로드 완료';
-            setTimeout(() => {
+            btn.textContent = '✅ 리포트 열림';
+              setTimeout(() => {
               btn.disabled = false;
-              btn.textContent = '📋 자세한 실행 리포트 보기 (₩2,000)';
+              btn.textContent = '📋 자세한 실행 리포트 보기 (무료)';
             }, 2000);
           });
           
