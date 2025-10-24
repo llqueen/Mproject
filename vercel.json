@@ -6,13 +6,15 @@
       "runtime": "@vercel/node@2.15.10",
       "maxDuration": 30,
       "memory": 1024,
-      "regions": ["iad1"]
+      "regions": ["iad1"],
+      "nodeVersion": "18.x"
     },
     "api/generateReport.js": {
       "runtime": "@vercel/node@2.15.10",
       "maxDuration": 30,
       "memory": 1024,
-      "regions": ["iad1"]
+      "regions": ["iad1"],
+      "nodeVersion": "18.x"
     }
   },
   "rewrites": [
