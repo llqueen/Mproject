@@ -1,4 +1,6 @@
 {
+  "buildCommand": "echo 'No build required'",
+  "outputDirectory": ".",
   "functions": {
     "api/recommend.js": {
       "runtime": "@vercel/node@3.0.0"
