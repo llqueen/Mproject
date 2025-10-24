@@ -72,8 +72,8 @@
   </div>
 
   <script>
-    const endpointRecommend = '/api/recommend';
-    const endpointReport = '/api/generateReport';
+    const endpointRecommend = '/.netlify/functions/recommend';
+    const endpointReport = '/.netlify/functions/generateReport';
 
     document.getElementById('btnGo').addEventListener('click', async () => {
       const skills = document.getElementById('skills').value.trim();
